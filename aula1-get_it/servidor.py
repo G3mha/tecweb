@@ -1,23 +1,13 @@
 import socket
+from pathlib import Path
+from utils import extract_route, read_file
 
+CUR_DIR = Path(__file__).parent
 SERVER_HOST = '0.0.0.0'
 SERVER_PORT = 8080
 
-RESPONSE_TEMPLATE = '''HTTP/1.1 200 OK
-
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Get-it</title>
-</head>
-<body>
-
-<h1>Get-it</h1>
-<p>Como o Post-it, mas com outro verbo</p>
-
-</body>
-</html>
+RESPONSE_TEMPLATE = '''
+HTML apagado por questão de espaço, mas você deve manter o código anterior aqui.
 '''
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -34,7 +24,13 @@ while True:
     print('*'*100)
     print(request)
 
-    client_connection.sendall(RESPONSE_TEMPLATE.encode())
+    route = extract_route(request)
+    filepath = CUR_DIR / route
+    if filepath.is_file():
+        response = 'HTTP/1.1 200 OK\n\n'.encode() + read_file(filepath)
+    else:
+        response = RESPONSE_TEMPLATE.encode()
+    client_connection.sendall(response)
 
     client_connection.close()
 
