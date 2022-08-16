@@ -4,3 +4,6 @@ def extract_route(request):
 def read_file(filepath):
     with open(filepath, 'rb') as file:
         return file.read()
+
+def load_data(filepath):
+    return read_file(filepath), extract_route(filepath)
