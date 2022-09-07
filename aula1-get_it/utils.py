@@ -22,3 +22,10 @@ def write_json(filename, content):
     data.append(content)
     with open (f'data/{filename}', 'w') as file:
         json.dump(data, file)
+
+def build_response(body='', code=200, reason='OK', headers=''):
+    #'HTTP/1.1 200 OK\n\n'.encode() + response
+    if headers:
+        headers=f"\n{headers}"
+    response = f"HTTP/1.1 {code} {reason}{headers}\n\n{body}".encode()
+    return response
