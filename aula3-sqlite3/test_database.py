@@ -101,38 +101,38 @@ class DatabaseTestCase(unittest.TestCase):
         assert len(data) == len(notes), f'A lista devolvida tem uma quantidade de elementos diferente do esperado. Esperado: {len(data)}. Obtido: {len(notes)}.'
         assert all(d.title == n.title and d.content == n.content for d, n in zip(data, notes)), f'A lista de anotações é diferente da esperada. Esperada: {data}. Obtida: {notes}.'
 
-    def test_update_row(self):
-        db = database.Database(DB_NAME)
-        if not hasattr(db, 'add') or not hasattr(db, 'get_all') or not hasattr(db, 'update') or not hasattr(database, 'Note'):
-            raise NotImplementedError('Método add, get_all ou update ou a classe Note não foram implementadas ainda. Ignore se ainda não chegou neste exercício')
+    # def test_update_row(self):
+    #     db = database.Database(DB_NAME)
+    #     if not hasattr(db, 'add') or not hasattr(db, 'get_all') or not hasattr(db, 'update') or not hasattr(database, 'Note'):
+    #         raise NotImplementedError('Método add, get_all ou update ou a classe Note não foram implementadas ainda. Ignore se ainda não chegou neste exercício')
 
-        data = [
-            database.Note(title='Hidratação', content='Lembrar de tomar água'),
-            database.Note(title='Pão doce', content='Abra o pão e coloque o seu suco em pó favorito.'),
-        ]
-        for note in data:
-            db.add(note)
+    #     data = [
+    #         database.Note(title='Hidratação', content='Lembrar de tomar água'),
+    #         database.Note(title='Pão doce', content='Abra o pão e coloque o seu suco em pó favorito.'),
+    #     ]
+    #     for note in data:
+    #         db.add(note)
 
-        notes = sorted(db.get_all(), key=lambda n: n.title)
-        new_title = 'Zebra'
-        new_content = 'É um animal que começa com a letra Z.'
-        updated_row = notes[1]
-        updated_row.title = new_title
-        updated_row.content = new_content
+    #     notes = sorted(db.get_all(), key=lambda n: n.title)
+    #     new_title = 'Zebra'
+    #     new_content = 'É um animal que começa com a letra Z.'
+    #     updated_row = notes[1]
+    #     updated_row.title = new_title
+    #     updated_row.content = new_content
 
-        try:
-            db.update(updated_row)
-        except sqlite3.OperationalError:
-            raise SyntaxError("Algo deu errado! Veja se não esqueceu as aspas em torno dos valores.")
+    #     try:
+    #         db.update(updated_row)
+    #     except sqlite3.OperationalError:
+    #         raise SyntaxError("Algo deu errado! Veja se não esqueceu as aspas em torno dos valores.")
 
-        notes = sorted(db.get_all(), key=lambda n: n.title)
+    #     notes = sorted(db.get_all(), key=lambda n: n.title)
 
 
-        data[1].title = new_title
-        data[1].content = new_content
-        assert isinstance(notes, list), f'O método get_all deveria devolver uma lista. Obtido: {notes}'
-        assert len(data) == len(notes), f'A lista devolvida tem uma quantidade de elementos diferente do esperado. Esperado: {len(data)}. Obtido: {len(notes)}.'
-        assert all(d.title == n.title and d.content == n.content for d, n in zip(data, notes)), f'A lista de anotações é diferente da esperada. Esperada: {data}. Obtida: {notes}.'
+    #     data[1].title = new_title
+    #     data[1].content = new_content
+    #     assert isinstance(notes, list), f'O método get_all deveria devolver uma lista. Obtido: {notes}'
+    #     assert len(data) == len(notes), f'A lista devolvida tem uma quantidade de elementos diferente do esperado. Esperado: {len(data)}. Obtido: {len(notes)}.'
+    #     assert all(d.title == n.title and d.content == n.content for d, n in zip(data, notes)), f'A lista de anotações é diferente da esperada. Esperada: {data}. Obtida: {notes}.'
 
     def test_delete_row(self):
         db = database.Database(DB_NAME)
