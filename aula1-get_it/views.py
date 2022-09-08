@@ -1,5 +1,7 @@
-from utils import load_data, load_template, write_json
+from utils import load_data, load_template, write_json, build_response
 import urllib.parse as urlparse
+from database.database import Database, Note
+
 
 def index(request):
     # A string de request sempre começa com o tipo da requisição (ex: GET, POST)
@@ -18,16 +20,20 @@ def index(request):
             chave, valor = chave_valor.split('=')
             valor = urlparse.unquote_plus(valor, encoding='utf-8')
             params[chave] = valor
-            write_json()
+        write_json('notes.json', params)
 
     
     # Cria uma lista de <li>'s para cada anotação
     # Se tiver curiosidade: https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions
     note_template = load_template('components/note.html')
-    notes_li = [
-        note_template.format(title=dados['titulo'], details=dados['detalhes'])
-        for dados in load_data('notes.json')
-    ]
+    notes_li = []
+    for dados in load_data('notes.json'):
+        try:
+            note = note_template.format(title=dados['titulo'], details=dados['detalhes'])
+            notes_li.append(note)
+        except:
+            print('error')
+            continue
     notes = '\n'.join(notes_li)
-
-    return load_template('index.html').format(notes=notes).encode()
+    body = load_template('index.html').format(notes=notes)
+    return build_response() + body.encode()

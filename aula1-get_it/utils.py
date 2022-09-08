@@ -8,19 +8,20 @@ def read_file(filepath):
         return file.read()
 
 def load_data(filename):
-    filepath = f'data/{filename}'
+    filepath = f'aula1-get_it/data/{filename}'
     with open (filepath, 'r') as file:
         return json.loads(file.read())
 
 def load_template(filename):
-    filepath = f'templates/{filename}'
+    filepath = f'aula1-get_it/templates/{filename}'
     with open (filepath, 'r') as file:
         return file.read()
 
 def write_json(filename, content):
     data = load_data(filename)
     data.append(content)
-    with open (f'data/{filename}', 'w') as file:
+    with open (f'aula1-get_it/data/{filename}', 'w') as file:
+        print(data)
         json.dump(data, file)
 
 def build_response(body='', code=200, reason='OK', headers=''):
