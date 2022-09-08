@@ -1,6 +1,5 @@
 from utils import load_data, load_template, write_json, build_response
 import urllib.parse as urlparse
-from database.database import Database, Note
 
 
 def index(request):
