@@ -6,6 +6,7 @@
 <p>Como o Post-it, mas com outro verbo</p>
 
 <form method="post">
+  {% csrf_token %}
   <label for="titulo">Título</label>
   <input id="titulo" type="text" name="titulo" />
   <label for="detalhes">Detalhes</label>
