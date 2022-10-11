@@ -136,7 +136,7 @@ async function main() {
   var answer = exercise.entrada.s0+(exercise.entrada.v*exercise.entrada.t);
   var isCorrect = await getResponse(token, SLUG, answer);
   console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
-  
+
   // Solve exercise 'Inverta a string'
   var SLUG = exercisesNames[7];
   var exercise = exercises[SLUG];
@@ -147,91 +147,128 @@ async function main() {
   // Solve exercise 'Soma os valores guardados no objeto'
   var SLUG = exercisesNames[8];
   var exercise = exercises[SLUG];
-  var answer = exercise.entrada.objeto.reduce((a, b) => a+b);
-  var isCorrect = getResponse(token, SLUG, answer);
+  var answer = 0;
+  Object.entries(exercise.entrada.objeto).forEach(([key, value]) => {
+    answer += parseInt(value);
+  });
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
+ 
+  // Solve exercise 'Encontra o n-ésimo número primo'
+  var SLUG = exercisesNames[9];
+  var exercise = exercises[SLUG];
+  const isPrime = (number) => {
+    for (let i = 2; i <= Math.sqrt(number); i++) {
+      if (number % i === 0) {
+        return false;
+      }
+    }
+    return number > 1;
+  }
+  var counter = 1;
+  for (var answer = 2; counter < exercise.entrada.n+1; answer++) {
+    if (isPrime(answer)) {
+      counter++;
+    }
+  }
+  answer--;
+  var isCorrect = await getResponse(token, SLUG, answer);
   console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
 
+  // Solve exercise 'Maior prefixo comum'
+  var SLUG = exercisesNames[10];
+  var exercise = exercises[SLUG];
+  var answer = '';
+
+  let words = exercise.entrada.strings.sort((a, b) => a.length - b.length);
+  for (listIndex = 0; listIndex < words.length; listIndex++) {
+    let word_current = words[listIndex];
+    for (listIndexSubsequent = listIndex+1; listIndexSubsequent < words.length; listIndexSubsequent++) {
+      let word_subsequent = words[listIndexSubsequent];
+      let charIndex = 0;
+      while (charIndex < word_current.length && charIndex < word_current.length && word_current[charIndex] == word_subsequent[charIndex]) {
+        charIndex++;
+      }
+      if (charIndex > answer.length) {
+        answer = word_current.substring(0, charIndex);
+      }
+    }
+  }
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
+
+  // Solve exercise 'Soma do segundo maior e menor números'
+  var SLUG = exercisesNames[11];
+  var exercise = exercises[SLUG];
+  var numbers = exercise.entrada.numeros.sort((a, b) => a - b);
+  var answer = numbers[1] + numbers[numbers.length-2];
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
+
+  // Solve exercise 'Conta palíndromos'
+  var SLUG = exercisesNames[12];
+  var exercise = exercises[SLUG];
+  var answer = 0;
+  exercise.entrada.palavras.forEach((word) => {
+    if (word == word.split('').reverse().join('')) {
+      answer++;
+    }
+  });
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
+
+  // Solve exercise 'Soma de strings de ints'
+  var SLUG = exercisesNames[13];
+  var exercise = exercises[SLUG];
+  var answer = exercise.entrada.strings.map(x => parseInt(x)).reduce((a, b) => a + b);
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
+
+  // Solve exercise 'Soma com requisições'
+  var SLUG = exercisesNames[14];
+  var exercise = exercises[SLUG];
+  var answer = 0;
+  for (var index = 0; index < exercise.entrada.endpoints.length; index++) {
+    var request = {
+      method: 'GET',
+      url: exercise.entrada.endpoints[index],
+      data: {
+        username: 'enriccog'
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    };
+    const response = await axios(request);
+    answer += response.data;
+  }
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
+
+  // Solve exercise 'Caça ao tesouro'
+  var SLUG = exercisesNames[15];
+  var exercise = exercises[SLUG];
+  var answer = exercise.entrada.inicio;
+  while (isNaN(answer)) {
+    var request = {
+      method: 'GET',
+      url: answer,
+      data: {
+        username: 'enriccog'
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    };
+    const response = await axios(request);
+    answer = response.data;
+  }
+  var isCorrect = await getResponse(token, SLUG, answer);
+  console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
 }
+
 main();
-
-// // ????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-
-
-// // Solve exercise 'Inverta a string'
-// var SLUG = exercisesNames[7];
-// var exercise = exercises[SLUG];
-// var answer = exercise.string.split('').reverse().join('');
-// var isCorrect = getResponse(token, SLUG, answer);
-// console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
-
-
-// // Solve exercise 'Inverta a string'
-// var SLUG = exercisesNames[7];
-// var exercise = exercises[SLUG];
-// var answer = exercise.string.split('').reverse().join('');
-// var isCorrect = getResponse(token, SLUG, answer);
-// console.log(`O exercício ${exercise.titulo} está correto: ${isCorrect}`);
-
-
-
-
-
-// /* 
-// {
-//   'volume-da-pizza': {
-//     titulo: 'Volume da PIZZA!',
-//     descricao: 'Faça uma função que calcule o volume de uma pizza de raio z e altura a. Assuma que a pizza é um cilindro. Envie o resultado arredondado com Math.round().',
-//     entrada: { z: 3, a: 2 },
-//     pontuacao: 0.5
-//   */
-// //   'soma-valores': {
-// //     titulo: 'Soma os valores guardados no objeto',
-// //     descricao: 'Qual é o valor da soma de todos os valores armazenados neste objeto?',
-// //     entrada: { objeto: [Object] },
-// //     pontuacao: 0.5
-// //   },
-// //   'n-esimo-primo': {
-// //     titulo: 'Encontra o n-ésimo número primo',
-// //     descricao: 'Qual é o n-ésimo número primo? Se n = 1, a resposta é 2, se n = 5, a resposta é 11.',
-// //     entrada: { n: 622 },
-// //     pontuacao: 0.5
-// //   },
-// //   'maior-prefixo-comum': {
-// //     titulo: 'Maior prefixo comum',
-// //     descricao: "Qual é o maior prefixo (qualquer conjunto de caracteres que começa no começo da string) que ocorre em pelo menos duas strings do array de entrada? Exemplo, para a entrada ['casa', 'casamento', 'casamos', 'banana'] a resposta esperada é 'casam'. Para a entrada ['abacaxi', 'banana'], a resposta esperada é '' (string vazia).",
-// //     entrada: { strings: [Array] },
-// //     pontuacao: 0.5
-// //   },
-// //   'soma-segundo-maior-e-menor-numeros': {
-// //     titulo: 'Soma do segundo maior e menor números',
-// //     descricao: 'Qual é a soma do segundo maior número do array com o segundo menor?',
-// //     entrada: { numeros: [Array] },
-// //     pontuacao: 0.5
-// //   },
-// //   'conta-palindromos': {
-// //     titulo: 'Conta palíndromos',
-// //     descricao: 'Quantos palíndromos existem neste array?',
-// //     entrada: { palavras: [Array] },
-// //     pontuacao: 0.5
-// //   },
-// //   'soma-de-strings-de-ints': {
-// //     titulo: 'Soma de strings de ints',
-// //     descricao: 'Calcule a soma dos valores inteiros representados por strings usando os métodos map e reduce.',
-// //     entrada: { strings: [Array] },
-// //     pontuacao: 0.5
-// //   },
-// //   'soma-com-requisicoes': {
-// //     titulo: 'Soma com requisições',
-// //     descricao: 'Calcule a soma dos valores contidos nos endpoints (cada endpoint devolve um número).',
-// //     entrada: { endpoints: [Array] },
-// //     pontuacao: 1
-// //   },
-// //   'caca-ao-tesouro': {
-// //     titulo: 'Caça ao tesouro',
-// //     descricao: 'Siga as URLs até encontrar o tesouro (um número).',
-// //     entrada: {
-// //       inicio: 'http://tecweb-js.insper-comp.com.br/exercicio/caca-ao-tesouro/yykkr'
-// //     },
-// //     pontuacao: 1
-// //   }
-// // }
