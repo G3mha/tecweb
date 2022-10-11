@@ -24,3 +24,24 @@
 ## Deploying on Heroku
     git push heroku main
 
+
+# Containers
+
+## Instalando o postgres pela 1a vez
+    docker pull postgres
+    mkdir -p $HOME/docker/volumes/postgres
+
+### Executar o container
+    docker run --rm --name pg-docker -e POSTGRES_PASSWORD=escolhaumasenha -d -p 5432:5432 -v $HOME/docker/volumes/postgres:/var/lib/postgresql/data postgres
+    docker exec -it pg-docker bash
+    psql -h localhost -U postgres
+    CREATE DATABASE getit;
+    CREATE USER getituser WITH PASSWORD 'getitsenha';
+    ALTER ROLE getituser SET client_encoding TO 'utf8';
+    ALTER ROLE getituser SET default_transaction_isolation TO 'read committed';
+    ALTER ROLE getituser SET timezone TO 'UTC';
+    GRANT ALL PRIVILEGES ON DATABASE getit TO getituser;
+    \q
+
+### Verificar se o container esta rodando
+    docker ps
